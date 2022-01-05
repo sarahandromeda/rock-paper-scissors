@@ -20,24 +20,23 @@
         // Generate random choice between 0-2 for choices
         // Select choice from list based on random number index
         // Return choice as computer's turn
-        function computerPlay() {
+        let computer = function() {
             let randomChoice = Math.floor(Math.random() * 3);
             let computerChoice = possChoices[randomChoice];
             return computerChoice
-        }
+        };
         // Create function to take player choice
         // Convert input to lowercase to avoid errors
         // Return players choice
-        function playerPlay() {
+        let user = function() {
             let playerChoice = input.value;
             playerChoice = playerChoice.toLowerCase();
             return playerChoice;
-        }
+        };
         // Create a function to complete turn
-        function playTurn() {
-            let user = playerPlay();
-            let computer = computerPlay();
+        function playTurn(user, computer) {
             console.log(computer);
+            console.log(user);
             if (!(possChoices.includes(user))) {
                 results.textContent = "Entry not recognized. Please enter rock, paper, scissors.";
             } else if (user == computer) {
@@ -62,7 +61,9 @@
                 }
             }
         }
-        submitButton.addEventListener("click", playTurn);
+        submitButton.addEventListener("click", function() {
+            playTurn(user(), computer());
+        });
         input.addEventListener("keyup", function(event) {
             event.preventDefault();
             if (event.keyCode == 13) {
