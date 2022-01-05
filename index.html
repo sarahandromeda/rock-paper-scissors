@@ -3,33 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>Rock, Paper, Scissors</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Want to play Rock, Paper, Scissors?</h1>
     <p>Choose Rock, Paper, or Scissors...</p>
     <input type="text" autofocus=True class="choice"><button class="submit">Shoot!</button>
+    <p class="results"></p>
     <script>
+        const possChoices = ['rock', 'paper', 'scissors'];
+        const submitButton = document.querySelector(".submit");
+        const input = document.querySelector(".choice");
+        const results = document.querySelector('.results');
         // Create a function for computers turn
         // Create a list of possible choices
         // Generate random choice between 0-2 for choices
         // Select choice from list based on random number index
         // Return choice as computer's turn
         function computerPlay() {
-            const possChoices = ['rock', 'paper', 'scissors'];
             let randomChoice = Math.floor(Math.random() * 3);
-            let choice = possChoices[randomChoice];
-            return choice
+            let computerChoice = possChoices[randomChoice];
+            return computerChoice
         }
         // Create function to take player choice
         // Convert input to lowercase to avoid errors
         // Return players choice
-        const submitButton = document.querySelector(".submit");
-        const input = document.querySelector(".choice");
-        submitButton.addEventListener("click", () => {
+        function playerPlay() {
             let playerChoice = input.value;
             playerChoice = playerChoice.toLowerCase();
             return playerChoice;
-        })
+        }
+        // Create a function to complete turn
+        function playTurn() {
+            let user = playerPlay();
+            let computer = computerPlay();
+            console.log(computer);
+            if (!(possChoices.includes(user))) {
+                results.textContent = "Entry not recognized. Please enter rock, paper, scissors.";
+            } else if (user == computer) {
+                results.textContent = `You both played ${user}, it's a tie!`;
+            } else if (user == "rock") {
+                if (computer == "paper") {
+                    results.textContent = "Paper beats rock, the computer wins!";
+                } else {
+                    results.textContent = "Rock beats scissors, you win!";
+                }
+            } else if (user == "paper") {
+                if (computer == "rock") {
+                    results.textContent = "Paper beats rock, you win!";
+                } else {
+                    results.textContent = "Scissors beats paper, computer wins!";
+                }
+            } else {
+                if (computer == "rock") {
+                    results.textContent = "Rock beats scissors, computer wins!";
+                } else {
+                    results.textContent = "Scissors beats paper, you win!";
+                }
+            }
+        }
+        submitButton.addEventListener("click", playTurn);
+        input.addEventListener("keyup", function(event) {
+            event.preventDefault();
+            if (event.keyCode == 13) {
+                submitButton.click();
+            }
+        });
+
+        
 
         // Create function to play a turn
         // Set function to take computer and player choice

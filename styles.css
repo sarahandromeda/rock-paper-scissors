@@ -1,0 +1,13 @@
+button {
+    margin: 5px;
+    background-color: rgb(0, 92, 23);
+    color: #fff;
+    padding: 5px;
+}
+
+body {
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    color: rgb(169, 37, 245);
+}
