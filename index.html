@@ -10,24 +10,23 @@
 </head>
 <body>
     <div class="intro">Click to Play</div>
-    <h1>Pick your Weapon!</h1>
-    <div class="cards">
-        <img id="rock" src="media/rock.png" alt="Play Rock">
-        <img id="paper" src="media/paper.png" alt="Play Paper">
-        <img id="scissors" src="media/scissors.png" alt="Play Scissors">
+    <div class="game-container">
+        <h1>Pick your Weapon!</h1>
+        <div class="cards">
+            <img id="rock" src="media/rock.png" alt="Play Rock">
+            <img id="paper" src="media/paper.png" alt="Play Paper">
+            <img id="scissors" src="media/scissors.png" alt="Play Scissors">
+        </div>
+        <table class="scores">
+            <tr>
+                <th>You</th>
+                <th>Computer</th>
+            </tr>
+            <tr>
+                <td id="your-score">0</td>
+                <td id="computer-score">0</td>
+            </tr>
+        </table>
     </div>
-    <table class="scores">
-        <tr>
-            <th colspan="2">Scores</th>
-        </tr>
-        <tr>
-            <th>You</th>
-            <th>Computer</th>
-        </tr>
-        <tr>
-            <td id="your-score">0</td>
-            <td id="computer-score">0</td>
-        </tr>
-    </table>
 </body>
 </html>

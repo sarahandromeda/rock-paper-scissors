@@ -6,6 +6,7 @@ body {
     height: 100%;
 }
 
+
 /* Intro div to hide on click */
 .intro {
     position: absolute;
@@ -16,26 +17,49 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 1;
     transition: opacity 0.7s linear;
 }
 
 .intro.hide {
     opacity: 0;
+    z-index: 0;
 }
 
 /* Main page styling */
 
+h1 {
+    text-align: center;
+    margin: 50px 0px;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
 img {
     background: transparent;
-    background-color: transparent;
+    background-color: #effff4;
     width: 200px;
+    height: 200px;
+    object-fit: contain;
+    border-radius: 35%;
+    padding: 5px;
 }
 
 table {
     border-collapse: collapse;
+    display: flex;
+    justify-content: center;
+    margin: 30px;
+    font-size: 30px;
 }
 
 td, th {
-    border: dotted black 2px;
+    border: dotted black .5px;
+    padding: 5px 20px;
+    text-align: center;
 }
+
+
