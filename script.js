@@ -75,6 +75,7 @@ const addPoint = function (winner) {
 const weapons = document.querySelectorAll(".cards img");
 weapons.forEach(weapon => {
     weapon.addEventListener("click", () => {
+        addCards(weapon);
         console.log(weapon);
         const userSelection = weapon.getAttribute("id");
         console.log(userSelection);
@@ -84,3 +85,28 @@ weapons.forEach(weapon => {
         addPoint(winner);
     })
 });
+
+// Set listener to card to add card to div that is revealed on top of 
+// game-container named round
+// Add card of computer choice to div as well 
+// Wait 2 seconds and highlight winner
+// Fade out round div
+const roundDiv = document.querySelector(".round");
+
+// Helper function that adds weapon cards to round div
+const addCards = function (weapon) {
+    const userWeapon = weapon.cloneNode(true);
+    userWeapon.classList.toggle("round");
+    roundDiv.appendChild(userWeapon);
+    let computerWeapon = computer();
+    computerWeapon = document.querySelector(`#${computerWeapon}`);
+    computerWeapon = computerWeapon.cloneNode(true);
+    computerWeapon.classList.toggle("round");
+    roundDiv.appendChild(computerWeapon);
+}
+
+const removeCards = function () {
+    while (roundDiv.lastElementChild) {
+        roundDiv.removeChild(roundDiv.lastElementChild)
+    }
+};
