@@ -71,33 +71,13 @@ const addPoint = function (winner) {
     }
 }
 
-// Set event listener to each cad to play round when clicked
-const weapons = document.querySelectorAll(".cards img");
-weapons.forEach(weapon => {
-    weapon.addEventListener("click", () => {
-        addCards(weapon);
-        console.log(weapon);
-        const userSelection = weapon.getAttribute("id");
-        console.log(userSelection);
-        const computerSelection = computer();
-        console.log(computerSelection);
-        returnWinner(userSelection,computerSelection);
-        addPoint(winner);
-    })
-});
-
-// Set listener to card to add card to div that is revealed on top of 
-// game-container named round
-// Add card of computer choice to div as well 
-// Wait 2 seconds and highlight winner
-// Fade out round div
-const roundDiv = document.querySelector(".round");
+const roundDiv = document.querySelector("div.round");
 
 // Helper function that adds weapon cards to round div
 const addCards = function (weapon) {
     const userWeapon = weapon.cloneNode(true);
     userWeapon.classList.toggle("round");
-    roundDiv.appendChild(userWeapon);
+    roundDiv.prepend(userWeapon);
     let computerWeapon = computer();
     computerWeapon = document.querySelector(`#${computerWeapon}`);
     computerWeapon = computerWeapon.cloneNode(true);
@@ -110,3 +90,35 @@ const removeCards = function () {
         roundDiv.removeChild(roundDiv.lastElementChild)
     }
 };
+
+
+const showRoundDiv = function () {
+    roundDiv.classList.toggle("hide");
+};
+
+const hideRoundDiv = function () {
+    roundDiv.classList.toggle("hide");
+};
+
+// Placeholder to make code workable for now
+roundDiv.addEventListener("click", () => {
+    hideRoundDiv();
+    removeCards();
+});
+
+
+// Set event listener to each cad to play round when clicked
+const weapons = document.querySelectorAll(".cards img");
+weapons.forEach(weapon => {
+    weapon.addEventListener("click", () => {
+        showRoundDiv();
+        addCards(weapon);
+        console.log(weapon);
+        const userSelection = weapon.getAttribute("id");
+        console.log(userSelection);
+        const computerSelection = computer();
+        console.log(computerSelection);
+        returnWinner(userSelection,computerSelection);
+        addPoint(winner);
+    })
+});
