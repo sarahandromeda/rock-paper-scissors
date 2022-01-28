@@ -5,92 +5,30 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <title>Rock Paper Scissor Game via Console and Prompt</title>
+    <script src="script.js" defer></script>
+    <title>Rock Paper Scissor Game</title>
 </head>
 <body>
-    <button class="start">Start Game</button>
-    <script>
-        const possChoices = ['rock', 'paper', 'scissors'];
-
-        // Function to return random computer choice
-        let computer = function() {
-            let randomChoice = Math.floor(Math.random() * 3);
-            let computerChoice = possChoices[randomChoice];
-            console.log(computerChoice);
-            return computerChoice
-        };
-
-        // Function to prompt user for choice and check that it's valid
-        let user = function() {
-            let userChoice = prompt("Rock, paper, or scissors?");
-            console.log(userChoice);
-            // While user choice is falsy or not in possChoices, prompt again
-            while ( (!(userChoice)) || (!(possChoices.includes(userChoice.toLowerCase()))) ) {
-                alert("Please enter a valid selection; rock, paper, or scissors...");
-                userChoice = prompt("Rock, paper, or scissors?");
-            }
-            return userChoice.toLowerCase();
-        }
-
-        // Play a round and determine winner based on user and computer selections
-        let winner = "";
-        function playRound(userSelection, computerSelection) {
-            if (userSelection === computerSelection) {
-                alert(`It's a tie, you both played ${userSelection}!`);
-                return winner = "tie";
-            } else if (userSelection === "rock") {
-                if (computerSelection === "paper") {
-                    alert(`${computerSelection} beats ${userSelection}, computer wins!`);
-                    return winner = "computer";
-                } else {
-                    alert(`${userSelection} beats ${computerSelection}, you win!`);
-                    return winner = "user"
-                };
-            } else if (userSelection === "paper") {
-                if (computerSelection === "rock") {
-                    alert(`${userSelection} beats ${computerSelection}, you win!`);
-                    return winner = "user";
-                } else {
-                    alert(`${computerSelection} beats ${userSelection}, computer wins!`);
-                    return winner = "computer";
-                };
-            } else {
-                if (computerSelection === "rock") {
-                    alert(`${computerSelection} beats ${userSelection}, computer wins!`);
-                    return winner = "computer"
-                } else {
-                    alert(`${userSelection} beats ${computerSelection}, you win!`);
-                    return winner = "user"
-                };
-            };
-        }
-
-        // Play round based on return statements of user and computer functions
-        // playRound(user(), computer());
-
-        // Function to play 5 rounds of game
-        function game() {
-            let userScore = 0;
-            let computerScore = 0; 
-            for (let rounds = 0; rounds < 5; rounds++) {
-                playRound(user(), computer());
-                if (winner === "user") {
-                    userScore++;
-                } else if (winner === "computer") {
-                    computerScore++;
-                } else {}
-            }
-            if (userScore > computerScore) {
-                alert(`The score is ${userScore} to ${computerScore}, you win!`);
-            } else if (userScore < computerScore) {
-                alert(`The score is ${computerScore} to ${userScore}, computer wins!`);
-            } else {
-                alert(`You both scored ${userScoore}, it's a tie!`);
-            }
-        }
-
-        const start = document.querySelector(".start");
-        start.addEventListener('click', game);
-    </script>
+    <div class="intro">Click to Play</div>
+    <div class="round hide">
+    </div>
+    <div class="game-container">
+        <h1>Pick your Weapon!</h1>
+        <div class="cards">
+            <img id="rock" src="media/rock.png" alt="Play Rock">
+            <img id="paper" src="media/paper.png" alt="Play Paper">
+            <img id="scissors" src="media/scissors.png" alt="Play Scissors">
+        </div>
+        <table class="scores">
+            <tr>
+                <th>You</th>
+                <th>Computer</th>
+            </tr>
+            <tr>
+                <td id="your-score">0</td>
+                <td id="computer-score">0</td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>

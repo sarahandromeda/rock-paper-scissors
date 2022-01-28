@@ -1,6 +1,110 @@
-button {
-    border: none;
-    font-size: 50px;
-    padding: 25%;
-    border-radius: 100%;
+* {
+    background-color: lightblue;
 }
+
+body {
+    height: 100%;
+}
+
+
+/* Intro div to hide on click */
+.intro {
+    position: absolute;
+    z-index: 2;
+    height: 100%;
+    width: 100%;
+    font-size: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: opacity 0.7s linear;
+}
+
+.intro.hide {
+    opacity: 0;
+}
+
+/* Main page styling */
+.game-container {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+}
+
+h1 {
+    text-align: center;
+    margin: 50px 0px;
+}
+
+.cards {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+img {
+    background: transparent;
+    background-color: #effff4;
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    border-radius: 35%;
+    padding: 5px;
+}
+
+.cards img:hover {
+    width: 250px;
+    height: 250px;
+}
+
+.cards img.picked {
+    width: 250px;
+    height: 250px;
+}
+
+.round img {
+    width: 250px;
+    height: 250px;
+}
+
+table {
+    border-collapse: collapse;
+    display: flex;
+    justify-content: center;
+    margin: 30px;
+    font-size: 30px;
+}
+
+td, th {
+    border: dotted black .5px;
+    padding: 5px 20px;
+    text-align: center;
+}
+
+div.round {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    gap: 50px;
+    justify-content: center;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.5s linear;
+}
+
+.round.hide {
+    opacity: 0;
+    z-index: 0;
+    transition: opacity 0.5s linear;
+}
+
+img.round {
+    position: fixed;
+}
+
