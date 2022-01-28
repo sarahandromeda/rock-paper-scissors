@@ -56,6 +56,21 @@ img {
     padding: 5px;
 }
 
+.cards img:hover {
+    width: 250px;
+    height: 250px;
+}
+
+.cards img.picked {
+    width: 250px;
+    height: 250px;
+}
+
+.round img {
+    width: 250px;
+    height: 250px;
+}
+
 table {
     border-collapse: collapse;
     display: flex;
@@ -88,3 +103,8 @@ div.round {
     z-index: 0;
     transition: opacity 0.5s linear;
 }
+
+img.round {
+    position: fixed;
+}
+

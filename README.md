@@ -12,3 +12,4 @@ Paper Image
 
 Scissors Image
     https://www.vectorstock.com/royalty-free-vector/scissors-clip-art-cartoon-vector-1509551
+    https://www.clipartmax.com/max/m2i8i8b1N4K9G6A0/

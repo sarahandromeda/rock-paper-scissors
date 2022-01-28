@@ -71,53 +71,119 @@ const addPoint = function (winner) {
     }
 }
 
+// Functions to play a round
 const roundDiv = document.querySelector("div.round");
 
-// Helper function that adds weapon cards to round div
-const addCards = function (weapon) {
-    const userWeapon = weapon.cloneNode(true);
-    userWeapon.classList.toggle("round");
-    roundDiv.prepend(userWeapon);
-    let computerWeapon = computer();
-    computerWeapon = document.querySelector(`#${computerWeapon}`);
-    computerWeapon = computerWeapon.cloneNode(true);
-    computerWeapon.classList.toggle("round");
-    roundDiv.appendChild(computerWeapon);
+// Helper function to find original position of cards
+const findPos = function (obj) {
+    let currLeft = 0;
+    let currTop = 0;
+    if (obj.offsetParent) {
+        do {
+			currLeft += obj.offsetLeft;
+			currTop += obj.offsetTop;
+        } while (obj = obj.offsetParent);
+    }
+    return [currLeft,currTop];
 }
 
+// Helper function to move card from og position to new
+const moveRoundCards = function (userPick, computerPick) {
+    const newCardElements = addCards(userPick, computerPick);
+    moveAnimation(newCardElements[0], newCardElements[1]);
+}
+
+// Helper function returning center coordinates of window
+const centerCoordinates = function () {
+    return [Math.round(window.innerWidth/2), Math.round(window.innerHeight/2)];
+}
+
+const moveAnimation = function (userCardElement, computerCardElement) {
+    const center = centerCoordinates();
+    // Set final positions
+    const finalUserX = center[0]-250;
+    const finalComputerX = center[0]+50;
+    // Set initial positions 
+    const initialUserCoordinates = findPos(userCardElement);
+    let initialUserX = initialUserCoordinates[0];
+    const initialComputerCoordinates = findPos(computerCardElement);
+    let initialComputerX = initialComputerCoordinates[0];
+    
+    const animate = setInterval(frame);
+    function frame() {
+        if (initialUserX == finalUserX && 
+                initialComputerX == finalComputerX) {
+            clearInterval(animate);
+        } else {
+            if (initialUserX < finalUserX) {
+                initialUserX++;
+                userCardElement.style.left = `${initialUserX}px`;
+            } else if (initialUserX > finalUserX) {
+                initialUserX--;
+                userCardElement.style.left = `${initialUserX}px`;
+            }
+
+            if (initialComputerX < finalComputerX) {
+                initialComputerX++;
+                computerCardElement.style.left = `${initialComputerX}px`;
+            } else if (initialComputerX > finalComputerX) {
+                initialComputerX--;
+                computerCardElement.style.left = `${initialComputerX}px`;
+            }
+        }
+    }
+}
+
+// Helper function that adds weapon cards to round div
+const addCards = function (userCard, computerCard) {
+    let userWeapon = document.getElementById(`${userCard}`);
+    const userWeaponCoordinates = findPos(userWeapon);
+    userWeapon = userWeapon.cloneNode(true);
+    userWeapon.classList.add("round");
+    userWeapon.style.left = `${userWeaponCoordinates[0]}px`;
+    userWeapon.style.top = `${userWeaponCoordinates[1]}px`;
+    roundDiv.appendChild(userWeapon);
+
+    let computerWeapon = document.querySelector(`#${computerCard}`);
+    const computerWeaponCoordinates = findPos(computerWeapon);
+    computerWeapon = computerWeapon.cloneNode(true);
+    computerWeapon.classList.add("round");
+    computerWeapon.style.left = `${computerWeaponCoordinates[0]}px`;
+    computerWeapon.style.top = `${computerWeaponCoordinates[1]}px`;
+    roundDiv.appendChild(computerWeapon);
+
+    return [userWeapon, computerWeapon];
+}
+
+// Resets round div to empty
 const removeCards = function () {
     while (roundDiv.lastElementChild) {
         roundDiv.removeChild(roundDiv.lastElementChild)
     }
 };
 
-
-const showRoundDiv = function () {
-    roundDiv.classList.toggle("hide");
-};
-
-const hideRoundDiv = function () {
+// Toggles round div to show or hide
+const toggleRoundDiv = function () {
     roundDiv.classList.toggle("hide");
 };
 
 // Placeholder to make code workable for now
 roundDiv.addEventListener("click", () => {
-    hideRoundDiv();
+    toggleRoundDiv();
     removeCards();
 });
 
-
-// Set event listener to each cad to play round when clicked
+// Set event listener to each card to play round when clicked
 const weapons = document.querySelectorAll(".cards img");
 weapons.forEach(weapon => {
     weapon.addEventListener("click", () => {
-        showRoundDiv();
-        addCards(weapon);
+        toggleRoundDiv();
         console.log(weapon);
         const userSelection = weapon.getAttribute("id");
         console.log(userSelection);
         const computerSelection = computer();
         console.log(computerSelection);
+        moveRoundCards(userSelection, computerSelection);
         returnWinner(userSelection,computerSelection);
         addPoint(winner);
     })
