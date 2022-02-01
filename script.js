@@ -59,16 +59,6 @@ const addPoint = function (winner) {
     } else if (winner == "computer") {
         ++computerScore.textContent;
     };
-    // When someone reaches 5, reset scores, alert winner
-    if (yourScore.textContent == 5) {
-        alert("You win!");
-        yourScore.textContent = 0;
-        computerScore.textContent = 0;
-    } else if (computerScore.textContent == 5) {
-        alert("Computer Wins!");
-        computerScore.textContent = 0;
-        yourScore.textContent = 0;
-    }
 }
 
 // Functions to play a round
@@ -97,19 +87,13 @@ const findPos = function (obj) {
 // Helper function that adds weapon cards to round div
 const addCards = function (userCard, computerCard) {
     let userWeapon = document.getElementById(`${userCard}`);
-    const userWeaponCoordinates = findPos(userWeapon);
     userWeapon = userWeapon.cloneNode(true);
     userWeapon.classList.add("round");
-    userWeapon.style.left = `${userWeaponCoordinates[0]}px`;
-    userWeapon.style.top = `${userWeaponCoordinates[1]}px`;
     roundDiv.appendChild(userWeapon);
 
     let computerWeapon = document.querySelector(`#${computerCard}`);
-    const computerWeaponCoordinates = findPos(computerWeapon);
     computerWeapon = computerWeapon.cloneNode(true);
     computerWeapon.classList.add("round");
-    computerWeapon.style.left = `${computerWeaponCoordinates[0]}px`;
-    computerWeapon.style.top = `${computerWeaponCoordinates[1]}px`;
     roundDiv.appendChild(computerWeapon);
 
     return [userWeapon, computerWeapon];
@@ -123,43 +107,17 @@ const centerCoordinates = function () {
 }
 
 const moveAnimation = function (userPick, computerPick) {
-    const center = centerCoordinates();
-    // Set final positions
-    const finalUserX = center[0]-250;
-    const finalComputerX = center[0]+50;
     // Set initial positions
     const newCardElements = addCards(userPick, computerPick);
     const userCardElement = newCardElements[0];
     const computerCardElement = newCardElements[1];
-    const initialUserCoordinates = findPos(userCardElement);
-    let initialUserX = initialUserCoordinates[0];
-    const initialComputerCoordinates = findPos(computerCardElement);
-    let initialComputerX = initialComputerCoordinates[0];
-    
-    // Need to optimize
-    const animate = setInterval(frame);
-    function frame() {
-        if (initialUserX == finalUserX && 
-                initialComputerX == finalComputerX) {
-            clearInterval(animate);
-        } else {
-            if (initialUserX < finalUserX) {
-                initialUserX++;
-                userCardElement.style.left = `${initialUserX}px`;
-            } else if (initialUserX > finalUserX) {
-                initialUserX--;
-                userCardElement.style.left = `${initialUserX}px`;
-            }
-
-            if (initialComputerX < finalComputerX) {
-                initialComputerX++;
-                computerCardElement.style.left = `${initialComputerX}px`;
-            } else if (initialComputerX > finalComputerX) {
-                initialComputerX--;
-                computerCardElement.style.left = `${initialComputerX}px`;
-            }
-        }
-    }
+    const centerElement = findPos(document.querySelector("#paper"));
+    userCardElement.style.left = `${centerElement[0]}px`;
+    userCardElement.style.top = `${centerElement[1]}px`;
+    computerCardElement.style.left = `${centerElement[0]}px`;
+    computerCardElement.style.top = `${centerElement[1]}px`;
+    userCardElement.classList.add("user");
+    computerCardElement.classList.add("computer"); 
     showWinner(userPick, computerPick);
 }
 
@@ -197,24 +155,33 @@ const resetRound = function () {
     resultsDiv.style.display = "none";
 };
 
-// Placeholder to make code workable for now
+// When results animation is finished reset divs
 resultsDiv.addEventListener("transitionend", (e) => {
     if (e.propertyName == "font-size") {
         toggleRoundDiv();
     } else if (e.propertyName == "opacity") {
         resetRound();
+        const finalUserScore = document.querySelector("#your-score").textContent;
+        const finalComputerScore = 
+                document.querySelector("#computer-score").textContent;
+        const endDiv = document.querySelector(".end");
+        if (finalUserScore == "5") {
+            endDiv.style.zIndex = 2;
+            endGame("you", endDiv);
+        } else if (finalComputerScore == "5") {
+            endDiv.style.zIndex = 2;
+            endGame("computer", endDiv);
+        }
     }
 });
-
-
 
 // Set event listener to each card to play round when clicked
 const weapons = document.querySelectorAll(".cards img");
 weapons.forEach(weapon => {
     weapon.addEventListener("click", () => {
+        toggleRoundDiv();
         roundDiv.style.display = "flex";
         resultsDiv.style.display= "flex";
-        toggleRoundDiv();
         const userSelection = weapon.getAttribute("id");
         const computerSelection = computer();
         moveAnimation(userSelection, computerSelection);
@@ -222,3 +189,36 @@ weapons.forEach(weapon => {
         addPoint(winner);
     })
 });
+
+const toggleEnd = function () {
+    const end = document.querySelector(".end");
+    end.classList.toggle("hide");
+}
+
+// Display game winner
+const endGame = function (victor, endContainer) {
+    if (victor == "you") {
+        endContainer.textContent = "Congrats! You win!";
+    } else {
+        endContainer.textContent = "Sorry, the computer won this time.";
+    }
+    
+    const playAgain = document.createElement("button");
+    playAgain.textContent = "Play Again?";
+    endContainer.appendChild(playAgain);
+    toggleEnd();
+    playAgain.addEventListener("click", () => {
+        let scores = document.querySelectorAll(".scores td");
+        scores.forEach( (score) => {
+            score.textContent = 0;
+        })
+        console.log(scores);
+        toggleEnd();
+        endContainer.style.zIndex = 0;
+    })
+}
+
+
+    
+
+
