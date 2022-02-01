@@ -45,7 +45,7 @@ h1 {
     display: flex;
     justify-content: center;
     gap: 20px;
-
+    height: 250px;
 }
 
 img {
