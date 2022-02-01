@@ -73,6 +73,13 @@ const addPoint = function (winner) {
 
 // Functions to play a round
 const roundDiv = document.querySelector("div.round");
+const resultsDiv = document.querySelector(".results");
+
+// Toggles round div to show or hide
+const toggleRoundDiv = function () {
+    roundDiv.classList.toggle("hide");
+    resultsDiv.classList.toggle("hide");
+};
 
 // Helper function to find original position of cards
 const findPos = function (obj) {
@@ -85,53 +92,6 @@ const findPos = function (obj) {
         } while (obj = obj.offsetParent);
     }
     return [currLeft,currTop];
-}
-
-// Helper function to move card from og position to new
-const moveRoundCards = function (userPick, computerPick) {
-    const newCardElements = addCards(userPick, computerPick);
-    moveAnimation(newCardElements[0], newCardElements[1]);
-}
-
-// Helper function returning center coordinates of window
-const centerCoordinates = function () {
-    return [Math.round(window.innerWidth/2), Math.round(window.innerHeight/2)];
-}
-
-const moveAnimation = function (userCardElement, computerCardElement) {
-    const center = centerCoordinates();
-    // Set final positions
-    const finalUserX = center[0]-250;
-    const finalComputerX = center[0]+50;
-    // Set initial positions 
-    const initialUserCoordinates = findPos(userCardElement);
-    let initialUserX = initialUserCoordinates[0];
-    const initialComputerCoordinates = findPos(computerCardElement);
-    let initialComputerX = initialComputerCoordinates[0];
-    
-    const animate = setInterval(frame);
-    function frame() {
-        if (initialUserX == finalUserX && 
-                initialComputerX == finalComputerX) {
-            clearInterval(animate);
-        } else {
-            if (initialUserX < finalUserX) {
-                initialUserX++;
-                userCardElement.style.left = `${initialUserX}px`;
-            } else if (initialUserX > finalUserX) {
-                initialUserX--;
-                userCardElement.style.left = `${initialUserX}px`;
-            }
-
-            if (initialComputerX < finalComputerX) {
-                initialComputerX++;
-                computerCardElement.style.left = `${initialComputerX}px`;
-            } else if (initialComputerX > finalComputerX) {
-                initialComputerX--;
-                computerCardElement.style.left = `${initialComputerX}px`;
-            }
-        }
-    }
 }
 
 // Helper function that adds weapon cards to round div
@@ -155,35 +115,109 @@ const addCards = function (userCard, computerCard) {
     return [userWeapon, computerWeapon];
 }
 
+// Helper function returning center coordinates of layout
+const centerCoordinates = function () {
+    let centerCard = document.querySelector("#paper");
+    centerCard = findPos(centerCard);
+    return [centerCard[0] + 125, centerCard[1] + 125];
+}
+
+const moveAnimation = function (userPick, computerPick) {
+    const center = centerCoordinates();
+    // Set final positions
+    const finalUserX = center[0]-250;
+    const finalComputerX = center[0]+50;
+    // Set initial positions
+    const newCardElements = addCards(userPick, computerPick);
+    const userCardElement = newCardElements[0];
+    const computerCardElement = newCardElements[1];
+    const initialUserCoordinates = findPos(userCardElement);
+    let initialUserX = initialUserCoordinates[0];
+    const initialComputerCoordinates = findPos(computerCardElement);
+    let initialComputerX = initialComputerCoordinates[0];
+    
+    // Need to optimize
+    const animate = setInterval(frame);
+    function frame() {
+        if (initialUserX == finalUserX && 
+                initialComputerX == finalComputerX) {
+            clearInterval(animate);
+        } else {
+            if (initialUserX < finalUserX) {
+                initialUserX++;
+                userCardElement.style.left = `${initialUserX}px`;
+            } else if (initialUserX > finalUserX) {
+                initialUserX--;
+                userCardElement.style.left = `${initialUserX}px`;
+            }
+
+            if (initialComputerX < finalComputerX) {
+                initialComputerX++;
+                computerCardElement.style.left = `${initialComputerX}px`;
+            } else if (initialComputerX > finalComputerX) {
+                initialComputerX--;
+                computerCardElement.style.left = `${initialComputerX}px`;
+            }
+        }
+    }
+    showWinner(userPick, computerPick);
+}
+
+// Helper function to display a div with the winner of round
+const showWinner = function (userWeaponPick, computerWeaponPick) {
+    let resultsText = document.createElement("p");
+    resultsText.setAttribute("id", "winner");
+    returnWinner(userWeaponPick, computerWeaponPick);
+    if (winner == "user") {
+     resultsText.textContent = "You Win!";
+    } else if (winner == "computer") {
+     resultsText.textContent = "Computer Wins!";
+    } else {
+     resultsText.textContent = "Draw!";
+    }
+    
+    resultsDiv.appendChild(resultsText);
+    resultsDiv.classList.remove("hide");
+    setTimeout(() => {animateResults(resultsText)}, 500);
+}
+
+const animateResults = function (resultsPara) {
+    resultsPara.classList.toggle("show");
+}
+
 // Resets round div to empty
-const removeCards = function () {
+const resetRound = function () {
     while (roundDiv.lastElementChild) {
         roundDiv.removeChild(roundDiv.lastElementChild)
     }
-};
-
-// Toggles round div to show or hide
-const toggleRoundDiv = function () {
-    roundDiv.classList.toggle("hide");
+    while (resultsDiv.lastElementChild) {
+        resultsDiv.removeChild(resultsDiv.lastElementChild)
+    }
+    roundDiv.style.display = "none";
+    resultsDiv.style.display = "none";
 };
 
 // Placeholder to make code workable for now
-roundDiv.addEventListener("click", () => {
-    toggleRoundDiv();
-    removeCards();
+resultsDiv.addEventListener("transitionend", (e) => {
+    if (e.propertyName == "font-size") {
+        toggleRoundDiv();
+    } else if (e.propertyName == "opacity") {
+        resetRound();
+    }
 });
+
+
 
 // Set event listener to each card to play round when clicked
 const weapons = document.querySelectorAll(".cards img");
 weapons.forEach(weapon => {
     weapon.addEventListener("click", () => {
+        roundDiv.style.display = "flex";
+        resultsDiv.style.display= "flex";
         toggleRoundDiv();
-        console.log(weapon);
         const userSelection = weapon.getAttribute("id");
-        console.log(userSelection);
         const computerSelection = computer();
-        console.log(computerSelection);
-        moveRoundCards(userSelection, computerSelection);
+        moveAnimation(userSelection, computerSelection);
         returnWinner(userSelection,computerSelection);
         addPoint(winner);
     })

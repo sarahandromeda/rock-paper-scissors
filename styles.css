@@ -33,17 +33,18 @@ body {
     flex-direction: column;
     width: 100%;
     height: 100%;
+    justify-content: center;
 }
 
 h1 {
     text-align: center;
-    margin: 50px 0px;
 }
 
 .cards {
     display: flex;
     justify-content: center;
     gap: 20px;
+
 }
 
 img {
@@ -90,21 +91,49 @@ div.round {
     width: 100%;
     position: absolute;
     z-index: 2;
-    display: flex;
+    display: none;
     gap: 50px;
     justify-content: center;
     align-items: center;
     opacity: 1;
-    transition: opacity 0.5s linear;
+    transition: opacity 0.5s;
 }
 
 .round.hide {
     opacity: 0;
-    z-index: 0;
-    transition: opacity 0.5s linear;
+    transition: opacity 0.5s;
 }
 
 img.round {
     position: fixed;
 }
 
+div.results.hide {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+div.results {
+    background-color: transparent;
+    z-index: 3;
+    position: absolute;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+.results p {
+    font-size: 0px;
+    transition: font-size 2s, transform 2s;
+    background-color: transparent;
+    text-align: center;
+}
+
+.results p.show {
+    font-size: 100px;
+    transform: rotate(360deg);
+}
